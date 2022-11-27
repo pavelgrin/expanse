@@ -1,14 +1,8 @@
-#include "./engine/engine.hpp"
-#include "./world/world.hpp"
-
-using namespace engine;
+#include <engine/engine.hpp>
+#include <world/world.hpp>
 
 int main()
 {
-    /* Handle args if needed */
-    /* Think about settings */
-    /* Pass it all to the engine */
-
-    Engine e;
-    return e.run();
+    world::init();
+    return engine::run();
 }

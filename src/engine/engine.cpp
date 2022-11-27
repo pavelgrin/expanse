@@ -1,25 +1,18 @@
-#include "./engine.hpp"
-#include <iostream>
+#include <engine/ecs.hpp>
+#include <engine/engine.hpp>
 
-using namespace engine;
-
-Engine::Engine(/* args */)
+namespace engine
 {
-}
-
-Engine::~Engine()
+int run()
 {
-}
-
-int Engine::run()
-{
-    m_state = Engine::State::Running;
-    while (m_state == Engine::State::Running)
+    bool isRunning = true;
+    while (isRunning)
     {
-        /* code */
+        engine::ecs::update();
 
-        m_state = Engine::State::Stopped;
+        isRunning = false;
     }
 
     return 0;
 }
+} // namespace engine
