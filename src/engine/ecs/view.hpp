@@ -3,14 +3,18 @@
 #include <tuple>
 #include <vector>
 
+#include <iostream>
+
 namespace engine::ecs
 {
-template <typename... Ts>
-std::vector<std::tuple<Ts&...>> view()
+class View
 {
-    // std::vector managedEntities;
-    // std::tie(getComponentContainer<Ts>(entity)...);
-    // std::vector<std::tuple<Ts&...>> list
-    // return list;
-}
+public:
+    template <typename... Ts>
+    std::vector<std::tuple<Ts&...>> get()
+    {
+        std::vector<std::tuple<Ts&...>> view{};
+        return view;
+    }
+};
 } // namespace engine::ecs

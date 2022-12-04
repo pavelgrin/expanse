@@ -1,8 +1,6 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <vector>
 
 namespace engine::ecs
@@ -12,15 +10,20 @@ class SystemManager
 public:
     using SystemType = void (*)(float);
 
-    void update(float);
+    void update(float dt)
+    {
+        for (auto& system : m_systems)
+        {
+            system(dt);
+        }
+    }
 
     template <SystemType system>
     void registerSystem()
     {
-        std::cout << "register System" << std::endl;
-
-        bool wasRegistered = std::find(m_systems.begin(), m_systems.end(), system) != m_systems.end();
-        assert(!wasRegistered && "Registering system more than once.");
+        static bool isRegistered{false};
+        assert(!isRegistered && "Registering system more than once");
+        isRegistered = true;
 
         m_systems.emplace_back(system);
     }
