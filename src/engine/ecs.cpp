@@ -1,20 +1,9 @@
 #include <engine/ecs.hpp>
-#include <engine/ecs/system_manager.hpp>
-
-#include <world/systems/movement.hpp>
 
 namespace engine::ecs
 {
-SystemManager systemManager{};
-
-void update()
+void update(float dt)
 {
-    systemManager.update();
+    Managers::m_systemManager.update(dt);
 }
-
-void registerSystem(SystemFunction f)
-{
-    systemManager.registerSystem();
-}
-
 } // namespace engine::ecs

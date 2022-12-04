@@ -1,15 +1,14 @@
 #include <engine/ecs/system_manager.hpp>
-#include <iostream>
 
 namespace engine::ecs
 {
-void SystemManager::update()
+void SystemManager::update(float dt)
 {
     std::cout << "update Systems" << std::endl;
-}
 
-void SystemManager::registerSystem()
-{
-    std::cout << "register System" << std::endl;
+    for (auto& system : m_systems)
+    {
+        system(dt);
+    }
 }
 } // namespace engine::ecs

@@ -15,6 +15,7 @@ void init()
     // entity.add<movement::Position>({0, 0});
     // entity.add<movement::Velocity>({1, 0});
 
-    // engine::ecs::registerSystem<world::system::movementSystem>();
+    engine::ecs::registerSystem<world::system::movementSystem>();
+    engine::ecs::registerSystem<world::system::testSystem>();
 }
 } // namespace world

@@ -8,7 +8,7 @@ int run()
     bool isRunning = true;
     while (isRunning)
     {
-        engine::ecs::update();
+        engine::ecs::update(0.f);
 
         isRunning = false;
     }
