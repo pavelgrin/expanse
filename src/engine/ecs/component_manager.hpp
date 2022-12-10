@@ -1,30 +1,52 @@
-#include <cassert>
+#pragma once
+
+#include <engine/ecs/types.hpp>
 
 namespace engine::ecs
 {
-class ComponentManager
+class IComponentMap
 {
 public:
-    template <typename T>
-    void registerComponent()
-    {
-        static bool isRegistered{false};
-        assert(!isRegistered && "Registering component type more than once");
-        isRegistered = true;
+    virtual size_t size()               = 0;
+    virtual bool has(const Entity id)   = 0;
+    virtual void erase(const Entity id) = 0;
+};
 
-        // The first call is needed to init component id of type T
-        getComponentId<T>();
-        m_idCounter += 1;
+template <typename T>
+class ComponentMap final : public IComponentMap
+{
+public:
+    void insert(const Entity id, T comp)
+    {
+        m_components.insert({id, comp});
     }
 
-    template <typename T>
-    int getComponentId()
+    T& get(const Entity id)
     {
-        static int componentId{m_idCounter};
-        return componentId;
+        if (auto comp = m_components.find(id); comp != m_components.end())
+        {
+            return comp->second;
+        }
+
+        assert("Trying to get component with invalid entity id");
+    }
+
+    size_t size() override
+    {
+        return m_components.size();
+    }
+
+    bool has(const Entity id) override
+    {
+        return static_cast<bool>(m_components.count(id));
+    }
+
+    void erase(const Entity id) override
+    {
+        m_components.erase(id);
     }
 
 private:
-    int m_idCounter{0};
+    std::unordered_map<Entity, T> m_components;
 };
 } // namespace engine::ecs

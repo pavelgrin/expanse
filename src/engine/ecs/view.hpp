@@ -3,8 +3,6 @@
 #include <tuple>
 #include <vector>
 
-#include <iostream>
-
 namespace engine::ecs
 {
 class View

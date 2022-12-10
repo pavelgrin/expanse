@@ -1,8 +1,8 @@
 #pragma once
 
-#include <engine/ecs/component_manager.hpp>
 #include <engine/ecs/entity_manager.hpp>
 #include <engine/ecs/system_manager.hpp>
+#include <engine/ecs/types.hpp>
 #include <engine/ecs/view.hpp>
 
 #include <tuple>
@@ -11,11 +11,10 @@
 namespace engine::ecs
 {
 
-class ECS
+class ECS final
 {
     ECS() = default;
 
-    static inline ComponentManager m_componentManager{};
     static inline EntityManager m_entityManager{};
     static inline SystemManager m_systemManager{};
     static inline View m_view{};
@@ -23,10 +22,19 @@ class ECS
 public:
     friend void update(float);
 
-    template <typename T>
-    friend void registerComponent();
+    friend Entity createEntity();
+    friend void destroyEntity(Entity);
 
-    template <SystemManager::SystemType system>
+    template <typename T>
+    friend void addComponent(Entity, T);
+
+    template <typename T>
+    friend void removeComponent(Entity);
+
+    template <typename T>
+    friend T& getComponent(Entity);
+
+    template <SystemType system>
     friend void registerSystem();
 
     template <typename... Ts>
@@ -38,13 +46,35 @@ inline void update(float dt)
     ECS::m_systemManager.update(dt);
 }
 
-template <typename T>
-void registerComponent()
+inline Entity createEntity()
 {
-    ECS::m_componentManager.registerComponent<T>();
+    return ECS::m_entityManager.createEntity();
 }
 
-template <SystemManager::SystemType system>
+inline void destroyEntity(Entity entity)
+{
+    ECS::m_entityManager.destroyEntity(entity);
+}
+
+template <typename T>
+void addComponent(Entity entity, T comp)
+{
+    ECS::m_entityManager.addComponent<T>(entity, comp);
+}
+
+template <typename T>
+void removeComponent(Entity entity)
+{
+    ECS::m_entityManager.removeComponent<T>(entity);
+}
+
+template <typename T>
+T& getComponent(Entity entity)
+{
+    return ECS::m_entityManager.getComponent<T>(entity);
+}
+
+template <SystemType system>
 void registerSystem()
 {
     ECS::m_systemManager.registerSystem<system>();

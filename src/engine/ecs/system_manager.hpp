@@ -1,15 +1,12 @@
 #pragma once
 
-#include <cassert>
-#include <vector>
+#include <engine/ecs/types.hpp>
 
 namespace engine::ecs
 {
-class SystemManager
+class SystemManager final
 {
 public:
-    using SystemType = void (*)(float);
-
     void update(float dt)
     {
         for (auto& system : m_systems)

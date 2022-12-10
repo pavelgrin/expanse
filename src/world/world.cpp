@@ -8,12 +8,10 @@ namespace world
 {
 void init()
 {
-    engine::ecs::registerComponent<world::component::Position>();
-    engine::ecs::registerComponent<world::component::Velocity>();
+    auto entity = engine::ecs::createEntity();
 
-    // auto entity = engine::ecs::createEntity();
-    // entity.add<movement::Position>({0, 0});
-    // entity.add<movement::Velocity>({1, 0});
+    engine::ecs::addComponent<world::component::Position>(entity, {0, 0});
+    engine::ecs::addComponent<world::component::Velocity>(entity, {1, 0});
 
     engine::ecs::registerSystem<world::system::movementSystem>();
 }
