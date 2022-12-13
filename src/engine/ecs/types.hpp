@@ -3,7 +3,9 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace engine::ecs

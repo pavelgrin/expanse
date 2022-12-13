@@ -14,5 +14,6 @@ void init()
     engine::ecs::addComponent<world::component::Velocity>(entity, {1, 0});
 
     engine::ecs::registerSystem<world::system::movementSystem>();
+    engine::ecs::registerSystem<world::system::printSystem>();
 }
 } // namespace world

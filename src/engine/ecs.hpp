@@ -1,5 +1,6 @@
 #pragma once
 
+#include <engine/ecs/component_storage.hpp>
 #include <engine/ecs/entity_manager.hpp>
 #include <engine/ecs/system_manager.hpp>
 #include <engine/ecs/types.hpp>
@@ -13,13 +14,16 @@ namespace engine::ecs
 
 class ECS final
 {
+private:
     ECS() = default;
 
-    static inline EntityManager m_entityManager{};
-    static inline SystemManager m_systemManager{};
-    static inline View m_view{};
+    static inline ComponentStorage m_componentStorage{};
 
-public:
+    static inline EntityManager m_entityManager{m_componentStorage};
+    static inline View m_view{m_componentStorage};
+
+    static inline SystemManager m_systemManager{};
+
     friend void update(float);
 
     friend Entity createEntity();
@@ -37,8 +41,8 @@ public:
     template <SystemType system>
     friend void registerSystem();
 
-    template <typename... Ts>
-    friend std::vector<std::tuple<Ts&...>> view();
+    template <typename T, typename... Ts>
+    friend std::vector<std::tuple<T&, Ts&...>> view();
 };
 
 inline void update(float dt)
@@ -80,10 +84,10 @@ void registerSystem()
     ECS::m_systemManager.registerSystem<system>();
 }
 
-template <typename... Ts>
-std::vector<std::tuple<Ts&...>> view()
+template <typename T, typename... Ts>
+std::vector<std::tuple<T&, Ts&...>> view()
 {
-    return ECS::m_view.get<Ts...>();
+    return ECS::m_view.get<T, Ts...>();
 }
 
 } // namespace engine::ecs
