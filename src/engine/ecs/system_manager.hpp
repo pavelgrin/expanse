@@ -22,7 +22,7 @@ public:
         assert(!isRegistered && "Registering system more than once");
         isRegistered = true;
 
-        m_systems.emplace_back(system);
+        m_systems.push_back(system);
     }
 
 private:

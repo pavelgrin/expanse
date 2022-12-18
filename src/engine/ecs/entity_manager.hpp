@@ -17,7 +17,7 @@ public:
         auto componentContainer = m_componentStorage.getContainer<Entity>(componentId);
         auto entityId           = static_cast<Entity>(componentContainer->size());
 
-        componentContainer->add(entityId, componentId);
+        componentContainer->add(entityId, std::move(componentId));
 
         return entityId;
     }
@@ -37,7 +37,7 @@ public:
     }
 
     template <typename T>
-    void addComponent(Entity entityId, T component)
+    void addComponent(Entity entityId, T&& component)
     {
         auto componentId       = m_componentStorage.getComponentId<T>();
         auto entityComponentId = m_componentStorage.getComponentId<Entity>();
@@ -48,7 +48,7 @@ public:
 
         if (!componentContainer->has(entityId))
         {
-            componentContainer->add(entityId, component);
+            componentContainer->add(entityId, std::move(component));
         }
     }
 

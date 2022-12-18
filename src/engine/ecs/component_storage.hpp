@@ -32,7 +32,7 @@ public:
 
         if (id >= m_componentContainers.size())
         {
-            m_componentContainers.emplace_back(std::make_shared<ComponentContainer<T>>());
+            m_componentContainers.push_back(std::make_shared<ComponentContainer<T>>());
         }
 
         return std::static_pointer_cast<ComponentContainer<T>>(m_componentContainers[id]);
@@ -43,7 +43,7 @@ public:
     {
         if (id >= m_componentContainers.size())
         {
-            m_componentContainers.emplace_back(std::make_shared<ComponentContainer<T>>());
+            m_componentContainers.push_back(std::make_shared<ComponentContainer<T>>());
         }
 
         return std::static_pointer_cast<ComponentContainer<T>>(m_componentContainers[id]);

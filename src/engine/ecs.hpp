@@ -30,7 +30,7 @@ private:
     friend void destroyEntity(Entity);
 
     template <typename T>
-    friend void addComponent(Entity, T);
+    friend void addComponent(Entity, T&&);
 
     template <typename T>
     friend void removeComponent(Entity);
@@ -61,9 +61,9 @@ inline void destroyEntity(Entity entity)
 }
 
 template <typename T>
-void addComponent(Entity entity, T comp)
+void addComponent(Entity entity, T&& comp)
 {
-    ECS::m_entityManager.addComponent<T>(entity, comp);
+    ECS::m_entityManager.addComponent<T>(entity, std::move(comp));
 }
 
 template <typename T>

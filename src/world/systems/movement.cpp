@@ -8,10 +8,10 @@ namespace world::system
 {
 void movementSystem(float dt)
 {
-    auto movementView = engine::ecs::view<
+    const auto movementView = engine::ecs::view<
         world::component::Position, world::component::Velocity>();
 
-    for (auto& [position, velocity] : movementView)
+    for (const auto& [position, velocity] : movementView)
     {
         position.m_x += velocity.m_x * dt;
         position.m_y += velocity.m_y * dt;
@@ -20,10 +20,10 @@ void movementSystem(float dt)
 
 void printSystem(float dt)
 {
-    auto movementView = engine::ecs::view<
+    const auto movementView = engine::ecs::view<
         world::component::Position, world::component::Velocity>();
 
-    for (auto& [position, velocity] : movementView)
+    for (const auto& [position, velocity] : movementView)
     {
         std::cout << "Position: X: " << position.m_x << " / Y: " << position.m_y << std::endl;
     }

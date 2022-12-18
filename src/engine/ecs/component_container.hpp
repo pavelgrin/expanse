@@ -18,9 +18,9 @@ template <typename T>
 class ComponentContainer final : public IComponentContainer
 {
 public:
-    void add(const Entity id, T comp)
+    void add(const Entity id, T&& comp)
     {
-        m_components.insert({id, comp});
+        m_components.insert(std::make_pair(id, std::move(comp)));
     }
 
     T& get(const Entity id)
