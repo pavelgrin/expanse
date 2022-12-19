@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(MIMIC)
 
-set(CMAKE_BUILD_TYPE Debug)
+message("Build type: ${CMAKE_BUILD_TYPE}")
 
 set(TARGET_APP app)
 

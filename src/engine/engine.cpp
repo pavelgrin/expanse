@@ -2,13 +2,13 @@
 #include <engine/ecs.hpp>
 #include <engine/engine.hpp>
 
-using Clock  = std::chrono::steady_clock;
-using Second = std::chrono::duration<float>;
-
 namespace engine
 {
 int run()
 {
+    using Clock  = std::chrono::steady_clock;
+    using Second = std::chrono::duration<float>;
+
     auto tickStartTime{Clock::now()};
     auto currentTime{Clock::now()};
     Second deltaTime{};
