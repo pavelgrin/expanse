@@ -32,10 +32,9 @@ public:
 
         assert("Trying to get component with invalid entity id");
 
-        // TODO: Fix this
-        // Return is needed because of
+        // Should never reach this line, but it's necessary because of
         // "Warning: control reaches end of non-void function [-Wreturn-type]"
-        return m_components.find(id)->second;
+        return m_stubComponent;
     }
 
     void remove(const Entity id) override
@@ -67,5 +66,6 @@ public:
 
 private:
     std::unordered_map<Entity, T> m_components;
+    T m_stubComponent{};
 };
 } // namespace engine::ecs
