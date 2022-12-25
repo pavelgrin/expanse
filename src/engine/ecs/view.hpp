@@ -6,17 +6,17 @@
 namespace engine::ecs
 {
 
-class ViewManager final
+class IView
+{
+};
+
+template <typename... Ts>
+class View final : public IView
 {
 public:
-    ViewManager() = delete;
-    ViewManager(ComponentStorage& storage) : m_componentStorage{storage} {}
-
-    template <typename... Ts>
-    std::vector<std::tuple<Ts&...>> get()
+    View() = delete;
+    View(ComponentStorage& storage) : m_componentStorage{storage}
     {
-        // TODO: Implement caching
-
         auto minEntityCount{m_componentStorage.getContainer<Entity>()->size()};
 
         for (auto count : {m_componentStorage.getContainer<Ts>()->size()...})
@@ -42,20 +42,22 @@ public:
             }
         }
 
-        std::vector<std::tuple<Ts&...>> view{};
-
         for (auto e : matchingEntities)
         {
-            view.push_back(std::tie(m_componentStorage.getContainer<Ts>()->get(e)...));
+            m_view.push_back(std::tie(m_componentStorage.getContainer<Ts>()->get(e)...));
         }
+    }
 
-        return view;
+    std::vector<std::tuple<Ts&...>> get()
+    {
+        return m_view;
     }
 
 private:
+    std::vector<std::tuple<Ts&...>> m_view{};
     ComponentStorage& m_componentStorage;
 
-    template <typename T = Entity, typename... Ts>
+    template <typename T = Entity, typename... Rest>
     std::vector<Entity> getEntities(size_t entityCount)
     {
         auto container = m_componentStorage.getContainer<T>();
@@ -65,7 +67,47 @@ private:
             return container->getEntities();
         }
 
-        return getEntities<Ts...>(entityCount);
+        return getEntities<Rest...>(entityCount);
+    }
+};
+
+class ViewManager final
+{
+public:
+    ViewManager() = delete;
+    ViewManager(ComponentStorage& storage) : m_componentStorage{storage} {}
+
+    template <typename... Ts>
+    std::vector<std::tuple<Ts&...>> get()
+    {
+        auto view = getViewInstance<Ts...>();
+        return view->get();
+    }
+
+private:
+    ComponentStorage& m_componentStorage;
+
+    ViewId m_viewCounter{0};
+    std::vector<std::shared_ptr<IView>> m_views{};
+
+    template <typename... Ts>
+    ComponentId getViewId()
+    {
+        static ViewId viewId{m_viewCounter++};
+        return viewId;
+    }
+
+    template <typename... Ts>
+    std::shared_ptr<View<Ts...>> getViewInstance()
+    {
+        auto id = getViewId<Ts...>();
+
+        if (id >= m_views.size())
+        {
+            m_views.push_back(std::make_shared<View<Ts...>>(m_componentStorage));
+        }
+
+        return std::static_pointer_cast<View<Ts...>>(m_views[id]);
     }
 };
 

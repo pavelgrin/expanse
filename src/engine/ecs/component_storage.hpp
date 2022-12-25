@@ -37,17 +37,6 @@ public:
     }
 
     template <typename T>
-    std::shared_ptr<ComponentContainer<T>> getContainer(ComponentId id)
-    {
-        if (id >= m_componentContainers.size())
-        {
-            m_componentContainers.push_back(std::make_shared<ComponentContainer<T>>());
-        }
-
-        return std::static_pointer_cast<ComponentContainer<T>>(m_componentContainers[id]);
-    }
-
-    template <typename T>
     ComponentId getComponentId()
     {
         static ComponentId componentId{m_componentCounter++};

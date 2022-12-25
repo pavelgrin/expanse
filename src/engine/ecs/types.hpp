@@ -13,5 +13,6 @@ namespace engine::ecs
 {
 using SystemType  = void (*)(float);
 using ComponentId = uint32_t;
+using ViewId      = uint32_t;
 using Entity      = uint32_t;
 } // namespace engine::ecs
