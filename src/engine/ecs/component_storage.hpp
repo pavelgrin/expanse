@@ -3,8 +3,6 @@
 #include <engine/ecs/component_container.hpp>
 #include <engine/ecs/types.hpp>
 
-#include <iostream>
-
 namespace engine::ecs
 {
 class ComponentStorage final

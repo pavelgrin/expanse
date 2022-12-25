@@ -22,7 +22,7 @@ int run()
     {
         currentTime   = Clock::now();
         deltaTime     = currentTime - tickStartTime;
-        tickStartTime = std::move(currentTime);
+        tickStartTime = currentTime;
 
         engine::ecs::update(deltaTime.count());
 

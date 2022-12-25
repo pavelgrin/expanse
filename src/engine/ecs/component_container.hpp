@@ -54,9 +54,10 @@ public:
 
     std::vector<Entity> getEntities()
     {
-        std::vector<Entity> entities;
+        std::vector<Entity> entities{};
+        entities.reserve(m_components.size());
 
-        for (auto [e, _] : m_components)
+        for (auto& [e, _] : m_components)
         {
             entities.push_back(e);
         }

@@ -20,7 +20,7 @@ private:
     static inline ComponentStorage m_componentStorage{};
 
     static inline EntityManager m_entityManager{m_componentStorage};
-    static inline View m_view{m_componentStorage};
+    static inline ViewManager m_viewManager{m_componentStorage};
 
     static inline SystemManager m_systemManager{};
 
@@ -87,7 +87,7 @@ void registerSystem()
 template <typename T, typename... Ts>
 std::vector<std::tuple<T&, Ts&...>> view()
 {
-    return ECS::m_view.get<T, Ts...>();
+    return ECS::m_viewManager.get<T, Ts...>();
 }
 
 } // namespace engine::ecs

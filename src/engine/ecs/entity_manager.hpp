@@ -14,7 +14,7 @@ public:
     Entity createEntity()
     {
         auto componentId        = m_componentStorage.getComponentId<Entity>();
-        auto componentContainer = m_componentStorage.getContainer<Entity>(componentId);
+        auto componentContainer = m_componentStorage.getContainer<Entity>();
         auto entityId           = static_cast<Entity>(componentContainer->size());
 
         componentContainer->add(entityId, std::move(componentId));
@@ -30,8 +30,7 @@ public:
     template <typename T>
     bool hasComponent(Entity entityId)
     {
-        auto componentId        = m_componentStorage.getComponentId<T>();
-        auto componentContainer = m_componentStorage.getContainer<T>(componentId);
+        auto componentContainer = m_componentStorage.getContainer<T>();
 
         return componentContainer->has(entityId);
     }
@@ -44,7 +43,7 @@ public:
 
         assert(componentId != entityComponentId && "Entity cannot be added by this method");
 
-        auto componentContainer = m_componentStorage.getContainer<T>(componentId);
+        auto componentContainer = m_componentStorage.getContainer<T>();
 
         if (!componentContainer->has(entityId))
         {
@@ -60,7 +59,7 @@ public:
 
         assert(componentId != entityComponentId && "Entity cannot be deleted by this method");
 
-        auto componentContainer = m_componentStorage.getContainer<T>(componentId);
+        auto componentContainer = m_componentStorage.getContainer<T>();
 
         if (componentContainer->has(entityId))
         {
@@ -71,8 +70,7 @@ public:
     template <typename T>
     T& getComponent(Entity entityId)
     {
-        auto componentId        = m_componentStorage.getComponentId<T>();
-        auto componentContainer = m_componentStorage.getContainer<T>(componentId);
+        auto componentContainer = m_componentStorage.getContainer<T>();
         return componentContainer->get(entityId);
     }
 
