@@ -7,17 +7,18 @@ namespace engine::ecs
 {
 class EntityManager final
 {
+    ComponentStorage& m_componentStorage;
+
 public:
     EntityManager() = delete;
     EntityManager(ComponentStorage& storage) : m_componentStorage{storage} {}
 
     Entity createEntity()
     {
-        auto componentId        = m_componentStorage.getComponentId<Entity>();
-        auto componentContainer = m_componentStorage.getContainer<Entity>();
-        auto entityId           = static_cast<Entity>(componentContainer->size());
+        const auto& componentContainer = m_componentStorage.getContainer<Entity>();
+        const auto entityId            = static_cast<Entity>(componentContainer->size());
 
-        componentContainer->add(entityId, std::move(componentId));
+        componentContainer->add(entityId, m_componentStorage.getComponentId<Entity>());
 
         return entityId;
     }
@@ -30,7 +31,7 @@ public:
     template <typename T>
     bool hasComponent(Entity entityId)
     {
-        auto componentContainer = m_componentStorage.getContainer<T>();
+        const auto& componentContainer = m_componentStorage.getContainer<T>();
 
         return componentContainer->has(entityId);
     }
@@ -38,12 +39,12 @@ public:
     template <typename T>
     void addComponent(Entity entityId, T&& component)
     {
-        auto componentId       = m_componentStorage.getComponentId<T>();
-        auto entityComponentId = m_componentStorage.getComponentId<Entity>();
+        const auto componentId       = m_componentStorage.getComponentId<T>();
+        const auto entityComponentId = m_componentStorage.getComponentId<Entity>();
 
         assert(componentId != entityComponentId && "Entity cannot be added by this method");
 
-        auto componentContainer = m_componentStorage.getContainer<T>();
+        const auto& componentContainer = m_componentStorage.getContainer<T>();
 
         if (!componentContainer->has(entityId))
         {
@@ -54,12 +55,12 @@ public:
     template <typename T>
     void removeComponent(Entity entityId)
     {
-        auto componentId       = m_componentStorage.getComponentId<T>();
-        auto entityComponentId = m_componentStorage.getComponentId<Entity>();
+        const auto componentId       = m_componentStorage.getComponentId<T>();
+        const auto entityComponentId = m_componentStorage.getComponentId<Entity>();
 
         assert(componentId != entityComponentId && "Entity cannot be deleted by this method");
 
-        auto componentContainer = m_componentStorage.getContainer<T>();
+        const auto& componentContainer = m_componentStorage.getContainer<T>();
 
         if (componentContainer->has(entityId))
         {
@@ -70,11 +71,8 @@ public:
     template <typename T>
     T& getComponent(Entity entityId)
     {
-        auto componentContainer = m_componentStorage.getContainer<T>();
+        const auto& componentContainer = m_componentStorage.getContainer<T>();
         return componentContainer->get(entityId);
     }
-
-private:
-    ComponentStorage& m_componentStorage;
 };
 } // namespace engine::ecs

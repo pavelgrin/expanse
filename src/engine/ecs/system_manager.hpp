@@ -6,10 +6,12 @@ namespace engine::ecs
 {
 class SystemManager final
 {
+    std::vector<SystemType> m_systems{};
+
 public:
     void update(float dt)
     {
-        for (auto& system : m_systems)
+        for (const auto& system : m_systems)
         {
             system(dt);
         }
@@ -24,8 +26,5 @@ public:
 
         m_systems.push_back(system);
     }
-
-private:
-    std::vector<SystemType> m_systems{};
 };
 } // namespace engine::ecs

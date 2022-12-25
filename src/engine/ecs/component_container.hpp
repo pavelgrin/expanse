@@ -9,14 +9,17 @@ class IComponentContainer
 public:
     virtual ~IComponentContainer() = default;
 
-    virtual void remove(const Entity id) = 0;
-    virtual bool has(const Entity id)    = 0;
-    virtual size_t size()                = 0;
+    virtual void remove(const Entity) = 0;
+    virtual bool has(const Entity)    = 0;
+    virtual size_t size()             = 0;
 };
 
 template <typename T>
 class ComponentContainer final : public IComponentContainer
 {
+    std::unordered_map<Entity, T> m_components;
+    T m_stubComponent{};
+
 public:
     void add(const Entity id, T&& comp)
     {
@@ -25,9 +28,9 @@ public:
 
     T& get(const Entity id)
     {
-        if (auto comp = m_components.find(id); comp != m_components.end())
+        if (const auto& container = m_components.find(id); container != m_components.end())
         {
-            return comp->second;
+            return container->second;
         }
 
         assert("Trying to get component with invalid entity id");
@@ -57,16 +60,12 @@ public:
         std::vector<Entity> entities{};
         entities.reserve(m_components.size());
 
-        for (auto& [e, _] : m_components)
+        for (const auto& [e, _] : m_components)
         {
             entities.push_back(e);
         }
 
         return entities;
     }
-
-private:
-    std::unordered_map<Entity, T> m_components;
-    T m_stubComponent{};
 };
 } // namespace engine::ecs

@@ -52,24 +52,29 @@ inline void update(float dt)
 
 inline Entity createEntity()
 {
-    return ECS::m_entityManager.createEntity();
+    Entity entity{ECS::m_entityManager.createEntity()};
+    ECS::m_viewManager.updateViews(entity);
+    return entity;
 }
 
 inline void destroyEntity(Entity entity)
 {
     ECS::m_entityManager.destroyEntity(entity);
+    ECS::m_viewManager.updateViews(entity);
 }
 
 template <typename T>
 void addComponent(Entity entity, T&& comp)
 {
     ECS::m_entityManager.addComponent<T>(entity, std::move(comp));
+    ECS::m_viewManager.updateViews<T>(entity);
 }
 
 template <typename T>
 void removeComponent(Entity entity)
 {
     ECS::m_entityManager.removeComponent<T>(entity);
+    ECS::m_viewManager.updateViews<T>(entity);
 }
 
 template <typename T>
@@ -87,7 +92,7 @@ void registerSystem()
 template <typename T, typename... Ts>
 std::vector<std::tuple<T&, Ts&...>> view()
 {
-    return ECS::m_viewManager.get<T, Ts...>();
+    return ECS::m_viewManager.getView<T, Ts...>();
 }
 
 } // namespace engine::ecs

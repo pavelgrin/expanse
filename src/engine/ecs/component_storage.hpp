@@ -7,6 +7,9 @@ namespace engine::ecs
 {
 class ComponentStorage final
 {
+    ComponentId m_componentCounter{0};
+    std::vector<std::shared_ptr<IComponentContainer>> m_componentContainers{};
+
 public:
     ComponentStorage()                        = default;
     ComponentStorage(ComponentStorage& other) = delete;
@@ -14,7 +17,7 @@ public:
 
     void removeComponentsByEntity(Entity entityId)
     {
-        for (auto componentContainer : m_componentContainers)
+        for (const auto& componentContainer : m_componentContainers)
         {
             if (componentContainer->has(entityId))
             {
@@ -26,7 +29,7 @@ public:
     template <typename T>
     std::shared_ptr<ComponentContainer<T>> getContainer()
     {
-        auto id = getComponentId<T>();
+        const auto id = getComponentId<T>();
 
         if (id >= m_componentContainers.size())
         {
@@ -42,9 +45,5 @@ public:
         static ComponentId componentId{m_componentCounter++};
         return componentId;
     }
-
-private:
-    ComponentId m_componentCounter{0};
-    std::vector<std::shared_ptr<IComponentContainer>> m_componentContainers{};
 };
 } // namespace engine::ecs
