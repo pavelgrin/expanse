@@ -20,7 +20,7 @@ class View final : public IView
     ComponentStorage& m_componentStorage;
 
     std::vector<std::tuple<Ts&...>> m_view{};
-    std::unordered_set<Entity> m_matchedEntities{};
+    std::vector<Entity> m_matchedEntities{};
 
 public:
     View() = delete;
@@ -46,11 +46,14 @@ public:
 
             if (isSuitable)
             {
-                m_matchedEntities.insert(e);
+                m_matchedEntities.push_back(e);
             }
         }
 
-        updateView();
+        for (const auto e : m_matchedEntities)
+        {
+            m_view.push_back(std::tie(m_componentStorage.getContainer<Ts>()->get(e)...));
+        }
     }
 
     std::vector<std::tuple<Ts&...>> get()
@@ -74,113 +77,21 @@ private:
 
     void update(Entity e) override
     {
-        bool isSuitable = (m_componentStorage.getContainer<Ts>()->has(e) && ...);
-        bool hasEntity  = static_cast<bool>(m_matchedEntities.count(e));
+        const auto it    = std::find(m_matchedEntities.begin(), m_matchedEntities.end(), e);
+        const auto index = std::distance(m_matchedEntities.begin(), it);
+
+        const bool isSuitable = (m_componentStorage.getContainer<Ts>()->has(e) && ...);
+        const bool hasEntity  = it != m_matchedEntities.end();
 
         if (isSuitable && !hasEntity)
         {
-            m_matchedEntities.insert(e);
-            updateView();
+            m_matchedEntities.push_back(e);
+            m_view.push_back(std::tie(m_componentStorage.getContainer<Ts>()->get(e)...));
         }
         else if (!isSuitable && hasEntity)
         {
-            m_matchedEntities.erase(e);
-            updateView();
-        }
-    }
-
-    void updateView()
-    {
-        m_view.clear();
-        for (const auto e : m_matchedEntities)
-        {
-            m_view.push_back(std::tie(m_componentStorage.getContainer<Ts>()->get(e)...));
-        }
-    }
-};
-
-class ViewManager final
-{
-    using ViewStorageItem = std::shared_ptr<IView>;
-    using ViewStorage     = std::vector<ViewStorageItem>;
-
-    ComponentStorage& m_componentStorage;
-
-    ViewId m_viewCounter{0};
-
-    ViewStorage m_viewStorage{};
-    std::unordered_map<ComponentId, ViewStorage> m_viewMap{};
-
-public:
-    ViewManager() = delete;
-    ViewManager(ComponentStorage& storage) : m_componentStorage{storage} {}
-
-    template <typename... Ts>
-    std::vector<std::tuple<Ts&...>> getView()
-    {
-        const auto& view = getViewInstance<Ts...>();
-        return view->get();
-    }
-
-    void updateViews(Entity e)
-    {
-        for (const auto& view : m_viewStorage)
-        {
-            view->update(e);
-        }
-    }
-
-    template <typename T>
-    void updateViews(Entity e)
-    {
-        const auto componentId = m_componentStorage.getComponentId<T>();
-
-        if (const auto& pair = m_viewMap.find(componentId); pair != m_viewMap.end())
-        {
-            for (const auto& view : pair->second)
-            {
-                view->update(e);
-            }
-        }
-    }
-
-private:
-    template <typename... Ts>
-    ComponentId getViewId()
-    {
-        static ViewId viewId{m_viewCounter++};
-        return viewId;
-    }
-
-    template <typename... Ts>
-    std::shared_ptr<View<Ts...>> getViewInstance()
-    {
-        const auto id = getViewId<Ts...>();
-
-        if (id >= m_viewStorage.size())
-        {
-            const auto view{std::make_shared<View<Ts...>>(m_componentStorage)};
-            m_viewStorage.push_back(view);
-
-            (updateViewMap<Ts>(view), ...);
-        }
-
-        return std::static_pointer_cast<View<Ts...>>(m_viewStorage[id]);
-    }
-
-    template <typename T>
-    void updateViewMap(const ViewStorageItem& view)
-    {
-        const auto componentId = m_componentStorage.getComponentId<T>();
-
-        if (const auto& pair = m_viewMap.find(componentId); pair != m_viewMap.end())
-        {
-            pair->second.push_back(view);
-        }
-        else
-        {
-            ViewStorage storage{view};
-            m_viewMap.insert(std::make_pair(componentId, storage));
+            m_matchedEntities.erase(it);
+            m_view.erase(m_view.begin() + index);
         }
     }
 };

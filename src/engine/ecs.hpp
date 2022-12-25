@@ -4,7 +4,7 @@
 #include <engine/ecs/entity_manager.hpp>
 #include <engine/ecs/system_manager.hpp>
 #include <engine/ecs/types.hpp>
-#include <engine/ecs/view.hpp>
+#include <engine/ecs/view_manager.hpp>
 
 #include <tuple>
 #include <vector>
@@ -54,6 +54,7 @@ inline Entity createEntity()
 {
     Entity entity{ECS::m_entityManager.createEntity()};
     ECS::m_viewManager.updateViews(entity);
+
     return entity;
 }
 
