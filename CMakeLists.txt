@@ -1,20 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(MIMIC)
+project(MIMIC VERSION 0.1.0)
 
-message("Build type: ${CMAKE_BUILD_TYPE}")
+message("[BUILD_TYPE] ${CMAKE_BUILD_TYPE}")
 
-set(TARGET_APP app)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(SOURCE ${CMAKE_SOURCE_DIR}/src/main.cpp)
+include(no_in_source_builds)
+CheckNoInSourceBuilds()
 
-add_executable(${TARGET_APP} ${SOURCE})
-set_target_properties(${TARGET_APP} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/engine)
-target_link_libraries(${TARGET_APP} engine)
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/world)
-target_link_libraries(${TARGET_APP} world)
+add_subdirectory(src bin)
+# add_subdirectory(test)

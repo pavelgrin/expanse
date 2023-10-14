@@ -4,7 +4,7 @@
 
 namespace engine
 {
-int run()
+void run()
 {
     using Clock  = std::chrono::steady_clock;
     using Second = std::chrono::duration<float>;
@@ -28,7 +28,5 @@ int run()
 
         isRunning = false;
     }
-
-    return 0;
 }
 } // namespace engine

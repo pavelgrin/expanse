@@ -2,5 +2,5 @@
 
 namespace engine
 {
-int run();
+void run();
 } // namespace engine

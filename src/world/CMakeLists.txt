@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.16)
+set(TARGET_OBJ world_object)
+set(TARGET_LIB world)
 
-set(TARGET world)
+file(GLOB SOURCES world/*.cpp world/**/*.cpp)
+source_group(Sources FILES ${SOURCES})
 
-file(GLOB SOURCES *.cpp **/*.cpp)
-file(GLOB HEADERS *.hpp **/*.hpp)
+add_library(${TARGET_OBJ} OBJECT ${SOURCES})
+target_include_directories(${TARGET_OBJ} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+target_link_libraries(${TARGET_OBJ} PUBLIC engine)
 
-source_group(Sources FILES ${SOURCES} ${HEADERS})
-
-add_library(${TARGET} ${SOURCES} ${HEADERS})
-target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
+add_library(${TARGET_LIB} STATIC ${SOURCES})
+target_link_libraries(${TARGET_LIB} PUBLIC ${TARGET_OBJ})

@@ -4,5 +4,7 @@
 int main()
 {
     world::init();
-    return engine::run();
+    engine::run();
+
+    return 0;
 }
