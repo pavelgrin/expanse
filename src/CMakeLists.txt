@@ -1,10 +1,8 @@
 add_subdirectory(engine)
 add_subdirectory(world)
 
-# target_link_libraries(world_static engine_static)
-
 add_executable(app main.cpp)
-target_link_libraries(app  PRIVATE engine world)
+target_link_libraries(app  PRIVATE ${ENGINE_LIB} ${WORLD_LIB})
 
-include(build_info)
+include(BuildInfo)
 BindBuildInfo(app)

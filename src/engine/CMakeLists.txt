@@ -1,13 +1,14 @@
-set(TARGET_OBJ engine_object)
-set(TARGET_LIB engine)
-
 file(GLOB SOURCES engine/*.cpp engine/**/*.cpp)
 source_group(Sources FILES ${SOURCES})
 
-add_library(${TARGET_OBJ} OBJECT ${SOURCES})
-target_include_directories(${TARGET_OBJ} PUBLIC
+add_library(${ENGINE_OBJ} OBJECT ${SOURCES})
+target_include_directories(${ENGINE_OBJ} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
-add_library(${TARGET_LIB} STATIC)
-target_link_libraries(${TARGET_LIB} PUBLIC ${TARGET_OBJ})
+add_library(${ENGINE_LIB} STATIC)
+target_link_libraries(${ENGINE_LIB} PUBLIC ${ENGINE_OBJ})
+
+include(Coverage)
+EnableCoverage(${ENGINE_LIB})
+CleanCoverage(${ENGINE_LIB})

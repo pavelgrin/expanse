@@ -9,8 +9,10 @@ message("[BUILD_TYPE] ${CMAKE_BUILD_TYPE}")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-include(no_in_source_builds)
+include(NoInSourceBuilds)
 CheckNoInSourceBuilds()
 
+include(SharedTargets)
+
 add_subdirectory(src bin)
-# add_subdirectory(test)
+add_subdirectory(test)
