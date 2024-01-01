@@ -10,5 +10,5 @@ do
 done
 
 mkdir -p .build
-cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -B ./.build -S .
+cmake -D CMAKE_BUILD_TYPE=$BUILD_TYPE -B ./.build -S .
 cmake --build ./.build

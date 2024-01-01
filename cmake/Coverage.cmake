@@ -1,20 +1,26 @@
 function(EnableCoverage target)
-    if (CMAKE_BUILD_TYPE STREQUAL Debug)
-        target_compile_options(${target} PRIVATE --coverage
-                                                 -fno-inline)
+    if(CMAKE_BUILD_TYPE STREQUAL Debug)
+        target_compile_options(${target} PRIVATE --coverage -fno-inline)
         target_link_options(${target} PUBLIC --coverage)
     endif()
 endfunction()
 
 function(CleanCoverage target)
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND
-                       find ${CMAKE_BINARY_DIR} -type f
-                       -name '*.gcda' -exec rm {} +)
+    add_custom_command(TARGET ${target} PRE_BUILD
+        COMMAND find ${CMAKE_BINARY_DIR} -type f -name '*.gcda' -exec rm {} +
+    )
 endfunction()
 
 function(AddCoverage target)
-    find_program(LCOV_PATH lcov REQUIRED)
-    find_program(GENHTML_PATH genhtml REQUIRED)
+    find_program(LCOV_PATH lcov)
+    find_program(GENHTML_PATH genhtml)
+
+    if(NOT LCOV_PATH)
+        message(FATAL_ERROR "[Coverage] lcov not found!")
+    elseif(NOT GENHTML_PATH)
+        message(FATAL_ERROR "[Coverage] genhtml not found!")
+    endif()
+
     add_custom_target(coverage-${target}
         COMMAND ${LCOV_PATH} -d . --zerocounters
         COMMAND $<TARGET_FILE:${target}>

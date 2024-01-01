@@ -9,7 +9,3 @@ target_link_libraries(${WORLD_OBJ} PUBLIC ${ENGINE_LIB})
 
 add_library(${WORLD_LIB} STATIC ${SOURCES})
 target_link_libraries(${WORLD_LIB} PUBLIC ${WORLD_OBJ})
-
-include(Coverage)
-EnableCoverage(${WORLD_LIB})
-CleanCoverage(${WORLD_LIB})
