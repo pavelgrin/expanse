@@ -28,6 +28,9 @@ public:
 
     T& get(const Entity id)
     {
+        // [NOTE][cppcheck] False positive error for 1.90 version
+        // [TODO] Install a newer version or find another solution
+        // cppcheck-suppress stlIfFind
         if (const auto& container = m_components.find(id); container != m_components.end())
         {
             return container->second;
