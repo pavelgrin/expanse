@@ -8,3 +8,6 @@ target_include_directories(${ENGINE_OBJ} PUBLIC
 
 add_library(${ENGINE_LIB} STATIC)
 target_link_libraries(${ENGINE_LIB} PUBLIC ${ENGINE_OBJ})
+
+include(Format)
+Format(${ENGINE_LIB} .)

@@ -9,3 +9,6 @@ target_link_libraries(${WORLD_OBJ} PUBLIC ${ENGINE_LIB})
 
 add_library(${WORLD_LIB} STATIC ${SOURCES})
 target_link_libraries(${WORLD_LIB} PUBLIC ${WORLD_OBJ})
+
+include(Format)
+Format(${WORLD_LIB} .)

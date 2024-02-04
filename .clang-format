@@ -5,6 +5,5 @@ IndentWidth: 4
 ColumnLimit: 0
 AlignConsecutiveAssignments: true
 AlignConsecutiveMacros: true
-IndentAccessModifiers: false
 AccessModifierOffset: -4
 AlignTrailingComments: true

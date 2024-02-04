@@ -13,7 +13,7 @@ class ComponentStorage final
 public:
     ComponentStorage()                        = default;
     ComponentStorage(ComponentStorage& other) = delete;
-    void operator=(const ComponentStorage&)   = delete;
+    void operator=(const ComponentStorage&) = delete;
 
     void removeComponentsByEntity(Entity entityId)
     {
