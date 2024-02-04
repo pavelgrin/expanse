@@ -10,7 +10,7 @@ add_library(${ENGINE_LIB} STATIC)
 target_link_libraries(${ENGINE_LIB} PUBLIC ${ENGINE_OBJ})
 
 include(Format)
-include(CppCheck)
+include(StaticCheckers)
 
 Format(${ENGINE_LIB} .)
-AddCppCheck(${ENGINE_LIB})
+AddStaticCheckers(${ENGINE_LIB})

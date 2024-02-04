@@ -11,7 +11,7 @@ add_library(${WORLD_LIB} STATIC ${SOURCES})
 target_link_libraries(${WORLD_LIB} PUBLIC ${WORLD_OBJ})
 
 include(Format)
-include(CppCheck)
+include(StaticCheckers)
 
 Format(${WORLD_LIB} .)
-AddCppCheck(${WORLD_LIB})
+AddStaticCheckers(${WORLD_LIB})
